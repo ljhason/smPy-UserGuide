@@ -1,0 +1,2 @@
+.pma filter=lfs diff=lfs merge=lfs -text
+*.pma filter=lfs diff=lfs merge=lfs -text
