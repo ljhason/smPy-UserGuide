@@ -35,7 +35,7 @@ deactivate () {
 # unset irrelevant variables
 deactivate nondestructive
 
-VIRTUAL_ENV="/Users/mac/Desktop/smPy-UserGuide/smpy_env"
+VIRTUAL_ENV="/Users/mac/Desktop/smPy-UserGuide/smPy_env"
 export VIRTUAL_ENV
 
 _OLD_VIRTUAL_PATH="$PATH"
@@ -52,9 +52,9 @@ fi
 
 if [ -z "${VIRTUAL_ENV_DISABLE_PROMPT:-}" ] ; then
     _OLD_VIRTUAL_PS1="${PS1:-}"
-    PS1="(smpy_env) ${PS1:-}"
+    PS1="(smPy_env) ${PS1:-}"
     export PS1
-    VIRTUAL_ENV_PROMPT="(smpy_env) "
+    VIRTUAL_ENV_PROMPT="(smPy_env) "
     export VIRTUAL_ENV_PROMPT
 fi
 
