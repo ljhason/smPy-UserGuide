@@ -125,13 +125,13 @@ def SG_background_subtraction(pma_file_path, avg_frame_array, radius, y_centre_a
     Performs background subtraction using a static global calculation. Returns an array of corrected frames as numpy arrays with the same shape as the input array.
     """
     frames_data = read_pma(pma_file_path) 
-    height, width, _ = avg_frame_array.shape
+    height, width = avg_frame_array.shape[:2]
     y_indices, x_indices = np.meshgrid(np.arange(height), np.arange(width), indexing="ij")
     filled_circle_mask = np.zeros((height, width), dtype=bool)
 
     if not CH_consideration:
         all_peaks_intensity = 0
-        total_intensity = np.sum(avg_frame_array[:, :,2])
+        total_intensity = np.sum(avg_frame_array[:, :])
         num_of_peaks = len(y_centre_arr)
         num_of_frame_pixels = height * width
 
@@ -153,8 +153,8 @@ def SG_background_subtraction(pma_file_path, avg_frame_array, radius, y_centre_a
         all_peaks_intensity_CH1 = 0
         all_peaks_intensity_CH2 = 0
 
-        total_intensity_CH1 = np.sum(avg_frame_array[:, :width//2,2])
-        total_intensity_CH2 = np.sum(avg_frame_array[:, width//2:,2])
+        total_intensity_CH1 = np.sum(avg_frame_array[:, :width//2])
+        total_intensity_CH2 = np.sum(avg_frame_array[:, width//2:])
         num_of_peaks = len(y_centre_arr)//2 
         num_of_frame_pixels = height*width//2
 
@@ -169,8 +169,8 @@ def SG_background_subtraction(pma_file_path, avg_frame_array, radius, y_centre_a
         filled_circle_mask_CH1 = filled_circle_mask[:, :width//2]
         filled_circle_mask_CH2 = filled_circle_mask[:, width//2:]
             
-        all_peaks_intensity_CH1 += np.sum(avg_frame_array[:, :width//2, 2][filled_circle_mask_CH1])
-        all_peaks_intensity_CH2 += np.sum(avg_frame_array[:, width//2:, 2][filled_circle_mask_CH2])
+        all_peaks_intensity_CH1 += np.sum(avg_frame_array[:, :width//2][filled_circle_mask_CH1])
+        all_peaks_intensity_CH2 += np.sum(avg_frame_array[:, width//2:][filled_circle_mask_CH2])
 
         intensity_to_remove_CH1 = ((total_intensity_CH1-all_peaks_intensity_CH1) // (num_of_frame_pixels-num_of_peak_pixels)).astype(np.int16)
         intensity_to_remove_CH2 = ((total_intensity_CH2-all_peaks_intensity_CH2) // (num_of_frame_pixels-num_of_peak_pixels)).astype(np.int16)
@@ -188,8 +188,10 @@ def DG_background_subtraction(pma_file_path, radius, y_centre_arr, x_centre_arr,
     """
     Performs background subtraction using a dynamic global calculation. Returns an array of corrected frames as numpy arrays with the same shape as the input array.
     """
+
     frames_data = read_pma(pma_file_path)
-    height, width = frames_data[0].shape
+    height, width = frames_data[0].shape[:2]
+
     y_indices, x_indices = np.meshgrid(np.arange(height), np.arange(width), indexing="ij")
     filled_circle_mask = np.zeros((height, width), dtype=bool)
     corrected_frames_data = []
@@ -280,62 +282,95 @@ def calc_distance(FRET_list, R_0):
     d = R_0 * ((1/np.array(FRET_list)) - 1)**(1/6)
     return d.tolist()
 
-def generate_images(pma_file_path):
+# def generate_images(pma_file_path):
+#     """
+#     Reads a .pma file and saves each frame as a .png image in a new directory.
+#     """
+#     try:
+#         output_name = pma_file_path.split(".")[-2].split("/")[-1]
+#         if not os.path.exists(f"{output_name}_Files"):
+#             os.makedirs(f"{output_name}_Files")
+#         else:
+#             print(f"Directory already exists: {output_name}_Files")
+#             return None
+        
+#         Frames_data = read_pma(pma_file_path)
+#         for frame_idx, frame_data in enumerate(Frames_data):
+#             plt.imsave(f"{output_name}_Files/{output_name}frame_{frame_idx}.png", frame_data, cmap='gray')
+
+#     except Exception as e:
+#         print(f"Error generating images or creating directory: {e}")
+#         return None
+    
+
+# def generate_mp4(images_path, fps=5):
+#     try:
+#         pma_name = f"{images_path.split('_')[-2]}"
+#         video_name = f"{pma_name}.mp4"
+#         video_file= os.path.join(images_path, f"{pma_name}_Video")
+        
+#         if not os.path.exists(video_file):
+#             os.makedirs(video_file)
+#         else:
+#             print(f"Directory already exists: {video_file}")
+#             return None
+            
+#         images = [img for img in os.listdir(images_path) if img.endswith(".png")]
+#         if not images:
+#             raise FileNotFoundError("No PNG images found in the specified directory.")
+#         images.sort(key=lambda x: int(x.split("_")[-1].split(".")[0]))
+#         frame = cv2.imread(os.path.join(images_path, images[0]))
+#         if frame is None:
+#             raise FileNotFoundError("Could not read the first image.")
+        
+#         height, width = frame.shape[:2]
+#         video = cv2.VideoWriter(os.path.join(video_file, video_name), cv2.VideoWriter_fourcc(*'mp4v'), fps, (width, height))
+#         for image in images:
+#             video.write(cv2.imread(os.path.join(images_path, image)))
+#         video.release()
+
+#         cv2.destroyAllWindows()
+#         print(f"Video sucessfully generated and saved as: {video_name}")
+#         print(f"Images: {(images)}")
+    
+#     except Exception as e:
+#         print(f"Error generating video: {e}")
+#         return None
+
+
+def generate_mp4(pma_file_path, fps=5):
     """
     Reads a .pma file and saves each frame as a .png image in a new directory.
     """
     try:
         output_name = pma_file_path.split(".")[-2].split("/")[-1]
-        if not os.path.exists(f"{output_name}_Files"):
-            os.makedirs(f"{output_name}_Files")
-        else:
-            print(f"Directory already exists: {output_name}_Files")
-            return None
+        video_name = f"{output_name}.mp4"
+        video_path= os.path.join(f"{output_name}_Video", video_name)
         
+        if not os.path.exists(f"{output_name}_Video"):
+            os.makedirs(f"{output_name}_Video")
+
         Frames_data = read_pma(pma_file_path)
-        for frame_idx, frame_data in enumerate(Frames_data):
-            plt.imsave(f"{output_name}_Files/{output_name}frame_{frame_idx}.png", frame_data, cmap='gray')
-
-    except Exception as e:
-        print(f"Error generating images or creating directory: {e}")
-        return None
-    
-
-def generate_mp4(images_path, fps=100):
-    try:
-        pma_name = f"{images_path.split('_')[-2]}"
-        video_name = f"{pma_name}.mp4"
-        video_file= os.path.join(images_path, f"{pma_name}_Video")
+        if not Frames_data or len(Frames_data) == 0:
+            raise ValueError("No frames found in PMA file.")
         
-        if not os.path.exists(video_file):
-            os.makedirs(video_file)
-        else:
-            print(f"Directory already exists: {video_file}")
-            return None
-            
-        images = [img for img in os.listdir(images_path) if img.endswith(".png")]
-        images.sort(key=lambda x: int(x.split("_")[1].split(".")[0]))
-        frame = cv2.imread(os.path.join(images_path, images[0]))
-        height, width = frame.shape
-        video = cv2.VideoWriter(os.path.join(video_file, video_name), cv2.VideoWriter_fourcc(*'mp4v'), fps, (width, height))
-
-        for image in images:
-            video.write(cv2.imread(os.path.join(images_path, image)))
-
+        height, width = Frames_data[0].shape[:2]
+        video = cv2.VideoWriter(video_name, cv2.VideoWriter_fourcc(*'mp4v'), fps, (width, height))
+        
+        for idx, frame in enumerate(Frames_data):
+            if frame.dtype!= np.uint8:
+                raise ValueError(f"Frame {idx} is not of type np.uint8.")
+            video.write(frame)
         video.release()
         cv2.destroyAllWindows()
-        print(f"Video sucessfully generated and saved as: {video_name}")
-        print(f"Images: {(images[:5])}...{(images[-5:])}")  # Show first and last 10 images
+
+        print(f"Video sucessfully generated and saved: {video_path}")
+        print(f"Frame Count: {(len(Frames_data))}")
     
     except Exception as e:
         print(f"Error generating video: {e}")
-        #delete the directory
-        if os.path.exists(video_file):
-            os.rmdir(video_file)
-        else:
-            print(f"Directory does not exist: {video_file}")
         return None
-    
+
 
 def avg_frame_png(pma_file_path):
     """

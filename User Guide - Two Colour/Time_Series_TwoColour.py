@@ -42,7 +42,7 @@ image_copy[mask] = [255, 255, 0]
 
 fig = plt.figure(figsize=(10, 10))
 ax = fig.add_subplot(111)
-ax.set_position([0.01, 0.3, 0.4, 0.6]) #[left, bottom, width, height]
+ax.set_position([0.01, 0.3, 0.4, 0.6]) 
 ax.imshow(image_copy)
 plt.axvline(x= 256, color='w', linestyle='-')
 ax.grid()
