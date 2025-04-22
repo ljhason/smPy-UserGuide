@@ -12,7 +12,7 @@ image = io.imread(image_path, as_gray=True)
 
 CH1_img_path = "User Guide - Three Colour/Synthetic_hel1_Avg/Synthetic_hel1_CH1_Avg_Frame.png"
 CH2_img_path = "User Guide - Three Colour/Synthetic_hel1_Avg/Synthetic_hel1_CH2_Avg_Frame.png"
-CH3_img_path = "User Guide - Three Colour/Synthetic_hel1_A3CH_seriesvg/Synthetic_hel1_CH3_Avg_Frame.png"
+CH3_img_path = "User Guide - Three Colour/Synthetic_hel1_Avg/Synthetic_hel1_CH3_Avg_Frame.png"
 
 good_peaks_1_CH1, _ = find_good_peaks(CH1_img_path)
 good_peaks_2_CH1, _ = find_good_peaks(CH2_img_path)
@@ -60,7 +60,7 @@ ax.grid()
 scat1 = ax.scatter(trip_CH1[:,1], trip_CH1[:,0], s=50, facecolors='none', edgecolors='g', alpha=0)
 scat2 = ax.scatter(trip_CH2[:,1], trip_CH2[:,0], s=50, facecolors='none', edgecolors='b', alpha=0)
 scat3 = ax.scatter(trip_CH3[:,1], trip_CH3[:,0], s=50, facecolors='none', edgecolors='purple', alpha=0)
-ax.set_title("Mapped Peaks: Click To Display Time-Series")
+ax.set_title(f"Mapped Peaks ({count_trip} Triplets): Click For Plots")
 
 scatter_data = [(scat1, trip_CH1, "CH1"), (scat2, trip_CH2, "CH2"), (scat3, trip_CH3, "CH3")]
 
