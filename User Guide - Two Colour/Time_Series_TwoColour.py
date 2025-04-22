@@ -16,14 +16,12 @@ CH2_img_path = "User Guide - Two Colour/hel1_Avg/hel1_CH2_Avg_Frame.png"
 good_peaks_1,_ = find_good_peaks(CH1_img_path)
 good_peaks_2_CH1,_ = find_good_peaks(CH2_img_path)
 
-good_peaks_2_CH2 = shift_peaks(good_peaks_2_CH1, [0, 256])
-
 CH1_arr = np.array([[18,92], [16,213], [108,43], [106,176], [210,51], [234, 219], [366,12], [322,192], [478,106], [502,160]])
 CH2_arr = np.array([[22,349], [19,470], [111,300], [108,433], [212,307], [234, 475], [367,268], [321,448], [476,361], [499,414]])
 
 params_x, params_y = find_polyfit_params(CH1_arr, CH2_arr, degree=3)
 mapped_peaks= apply_polyfit_params(good_peaks_1, params_x, params_y).astype(np.uint16)
-poly_pair_count, poly_pair_CH1, poly_pair_CH2 = find_pairs(good_peaks_1, mapped_peaks, tolerance=3, Channel_count=2, shift=[-1,-10])
+poly_pair_count, poly_pair_CH1, poly_pair_CH2 = find_pairs(good_peaks_1, mapped_peaks, tolerance=4, Channel_count=2, shift=[-1,-10])
 
 
 y_centres = np.concatenate(( poly_pair_CH1[:,0], poly_pair_CH2[:,0]))

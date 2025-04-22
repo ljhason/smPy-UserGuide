@@ -42,13 +42,13 @@ def avg_frame_arr(pma_file_path):
         print(f"Error generating average frame: {e}")
         return None
 
-def find_peaks(image_path, sigma=3, block_size=16, scaler_percent=32):
+def find_peaks(image_path, min_distance = 2, clip=30, block_size = 32, scaler_percent = 20):
     """
     From a grayscale image, finds all peaks bright spots in the image using a local maximum filter.
     """
-    std = 4*sigma
-
+    
     image = io.imread(image_path, as_gray=True).astype(np.uint8)
+    std_dev = np.std(image)
     height, width = image.shape
     image_1 = image.copy()
     min_intensity = np.min(image_1)
@@ -62,12 +62,12 @@ def find_peaks(image_path, sigma=3, block_size=16, scaler_percent=32):
             background[(i-8)//block_size, (j-8)//block_size] = np.min(image_1[i-8:i+8, j-8:j+8])
         
 
-    background = np.clip(background.astype(np.uint8) - 10, 0, 255)
+    background = np.clip(background.astype(np.uint8) - clip, 0, 255)
     image_1 = image - background
     image_2 = image_1.copy()
     med = np.median(image_1)
-    image_2[image_2 < (med + 3*std)] = 0
-    peak_coords = peak_local_max(image_2, min_distance=int(sigma), threshold_abs=threshold)
+    image_2[image_2 < (med + 3*std_dev)] = 0
+    peak_coords = peak_local_max(image_2, min_distance=int(min_distance), threshold_abs=threshold)
     
     return peak_coords, image_2
 
@@ -338,7 +338,7 @@ def calc_distance(FRET_list, R_0):
 #         return None
 
 
-def generate_mp4(pma_file_path, fps=5):
+def generate_video(pma_file_path, fps=5):
     """
     Reads a .pma file and saves each frame as a .png image in a new directory.
     """
@@ -352,14 +352,18 @@ def generate_mp4(pma_file_path, fps=5):
 
         Frames_data = read_pma(pma_file_path)
         if not Frames_data or len(Frames_data) == 0:
-            raise ValueError("No frames found in PMA file.")
+            raise ValueError("No frames found in pma file.")
         
         height, width = Frames_data[0].shape[:2]
-        video = cv2.VideoWriter(video_name, cv2.VideoWriter_fourcc(*'mp4v'), fps, (width, height))
+        video = cv2.VideoWriter(video_path, cv2.VideoWriter_fourcc(*'mp4v'), fps, (width, height))
+        
+        if not video.isOpened():
+            raise IOError("Failed to open VideoWriter. Codec may not be supported.")
         
         for idx, frame in enumerate(Frames_data):
             if frame.dtype!= np.uint8:
                 raise ValueError(f"Frame {idx} is not of type np.uint8.")
+            
             video.write(frame)
         video.release()
         cv2.destroyAllWindows()
@@ -398,12 +402,11 @@ def dim_to_3(image):
     """
     return np.stack((image,) * 3, axis=-1)
 
-
-def find_good_peaks(image_path, sigma=3, block_size=16, scaler_percent=32, boarder=10, max_rad=3):
+def find_good_peaks(image_path, min_distance = 2, clip=10, block_size = 32, scaler_percent = 20, boarder=10, max_rad=3):
     """
     From a grayscale image, finds all peaks bright spots in the image using a local maximum filter and filters out the peaks that are too close to the edges and whose radius is larger than max_rad.
     """
-    peaks_coords, image_2 = find_peaks(image_path, sigma, block_size, scaler_percent)
+    peaks_coords, image_2 = find_peaks(image_path, min_distance, clip, block_size, scaler_percent)
     bad_peaks = []
     good_peaks = []
     height, width = io.imread(image_path).shape
