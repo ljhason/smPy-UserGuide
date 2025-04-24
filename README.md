@@ -13,7 +13,7 @@ The User Guides provide details on how to use smPy functions to analyse two colo
 * Importing and reading PMA files
 * Creating mp4 files
 * Creating an average frame
-* Detecting `good' peaks
+* Detecting 'good' peaks
 * Mapping channel peaks
 * Background treatment
 * Displaying and exporting intensity, FRET efficiency, and distance time-series plots.
@@ -27,7 +27,7 @@ To install all required packages via pip:
 pip install numpy scikit-image matplotlib opencv-python pillow
 ```
 
-## Project Structure
+## Repository Structure
 
 Below I provide a brief overview of the key directories within this repository:
 ### `pma files/`
