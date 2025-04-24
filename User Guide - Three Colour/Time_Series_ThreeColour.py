@@ -57,7 +57,7 @@ plt.axvline(x= 171, color='w', linestyle='-')
 plt.axvline(x= 342, color='w', linestyle='-')
 ax.grid()
 
-scat1 = ax.scatter(trip_CH1[:,1], trip_CH1[:,0], s=50, facecolors='none', edgecolors='g', alpha=0)
+scat1 = ax.scatter(trip_CH1[:,1], trip_CH1[:,0], s=50, facecolors='none', edgecolors='orange', alpha=0)
 scat2 = ax.scatter(trip_CH2[:,1], trip_CH2[:,0], s=50, facecolors='none', edgecolors='b', alpha=0)
 scat3 = ax.scatter(trip_CH3[:,1], trip_CH3[:,0], s=50, facecolors='none', edgecolors='purple', alpha=0)
 ax.set_title(f"Mapped Peaks ({count_trip} Triplets): Click For Plots")

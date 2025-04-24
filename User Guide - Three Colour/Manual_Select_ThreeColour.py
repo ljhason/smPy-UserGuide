@@ -10,7 +10,6 @@ file_path = "../pma files/Synthetic_hel1.pma"
 image_path = "User Guide - Three Colour/Synthetic_hel1_Avg/Synthetic_hel1_Avg_Frame.png"
 image = io.imread(image_path, as_gray=True)
 
-#Chanel image paths
 CH1_img_path = "User Guide - Three Colour/Synthetic_hel1_Avg/Synthetic_hel1_CH1_Avg_Frame.png"
 CH2_img_path = "User Guide - Three Colour/Synthetic_hel1_Avg/Synthetic_hel1_CH2_Avg_Frame.png"
 CH3_img_path = "User Guide - Three Colour/Synthetic_hel1_Avg/Synthetic_hel1_CH3_Avg_Frame.png"
@@ -46,7 +45,7 @@ ax.set_xlabel("X")
 ax.set_ylabel("Y")
 ax.imshow(image, cmap="gray")
 
-scat1 = ax.scatter(good_peaks_1_CH1[:, 1], good_peaks_1_CH1[:, 0], s=50, facecolors='none', edgecolors='g', label='Peaks from CH1')
+scat1 = ax.scatter(good_peaks_1_CH1[:, 1], good_peaks_1_CH1[:, 0], s=50, facecolors='none', edgecolors='orange', label='Peaks from CH1')
 scat2 = ax.scatter(good_peaks_2_CH2[:, 1], good_peaks_2_CH2[:, 0], s=50, facecolors='none', edgecolors='b', label='Peaks from CH2')
 scat3 = ax.scatter(good_peaks_3_CH3[:, 1], good_peaks_3_CH3[:, 0], s=50, facecolors='none', edgecolors='purple', label='Peaks from CH3')
 ax.legend(loc='upper right', bbox_to_anchor=(1.1, 1.15))

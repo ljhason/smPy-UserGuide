@@ -282,62 +282,6 @@ def calc_distance(FRET_list, R_0):
     d = R_0 * ((1/np.array(FRET_list)) - 1)**(1/6)
     return d.tolist()
 
-# def generate_images(pma_file_path):
-#     """
-#     Reads a .pma file and saves each frame as a .png image in a new directory.
-#     """
-#     try:
-#         output_name = pma_file_path.split(".")[-2].split("/")[-1]
-#         if not os.path.exists(f"{output_name}_Files"):
-#             os.makedirs(f"{output_name}_Files")
-#         else:
-#             print(f"Directory already exists: {output_name}_Files")
-#             return None
-        
-#         Frames_data = read_pma(pma_file_path)
-#         for frame_idx, frame_data in enumerate(Frames_data):
-#             plt.imsave(f"{output_name}_Files/{output_name}frame_{frame_idx}.png", frame_data, cmap='gray')
-
-#     except Exception as e:
-#         print(f"Error generating images or creating directory: {e}")
-#         return None
-    
-
-# def generate_mp4(images_path, fps=5):
-#     try:
-#         pma_name = f"{images_path.split('_')[-2]}"
-#         video_name = f"{pma_name}.mp4"
-#         video_file= os.path.join(images_path, f"{pma_name}_Video")
-        
-#         if not os.path.exists(video_file):
-#             os.makedirs(video_file)
-#         else:
-#             print(f"Directory already exists: {video_file}")
-#             return None
-            
-#         images = [img for img in os.listdir(images_path) if img.endswith(".png")]
-#         if not images:
-#             raise FileNotFoundError("No PNG images found in the specified directory.")
-#         images.sort(key=lambda x: int(x.split("_")[-1].split(".")[0]))
-#         frame = cv2.imread(os.path.join(images_path, images[0]))
-#         if frame is None:
-#             raise FileNotFoundError("Could not read the first image.")
-        
-#         height, width = frame.shape[:2]
-#         video = cv2.VideoWriter(os.path.join(video_file, video_name), cv2.VideoWriter_fourcc(*'mp4v'), fps, (width, height))
-#         for image in images:
-#             video.write(cv2.imread(os.path.join(images_path, image)))
-#         video.release()
-
-#         cv2.destroyAllWindows()
-#         print(f"Video sucessfully generated and saved as: {video_name}")
-#         print(f"Images: {(images)}")
-    
-#     except Exception as e:
-#         print(f"Error generating video: {e}")
-#         return None
-
-
 def generate_video(pma_file_path, fps=5):
     """
     Reads a .pma file and saves each frame as a .png image in a new directory.
@@ -541,7 +485,7 @@ def print_coords_trigger(event, fig, scatter_data):
     annot.set_visible(visible)
     fig.canvas.draw_idle()
 
-def interactive_zoom(event, fig, ax, scatter_data, image_3d, image_orig, zoom_size=5, CH1_zoom_axes=[0.75, 0.6, 0.2, 0.2], CH2_zoom_axes=[0.75, 0.3, 0.2, 0.2], CH1_colour = "g", CH2_colour = "b"):
+def interactive_zoom(event, fig, ax, scatter_data, image_3d, image_orig, zoom_size=5, CH1_zoom_axes=[0.75, 0.6, 0.2, 0.2], CH2_zoom_axes=[0.75, 0.3, 0.2, 0.2], CH1_colour = "orange", CH2_colour = "b"):
     """ 
     Checks if the mouse hovers over a point and updates annotation. If clicked, it displays the zoomed image of that peak and its corresponding peak in the other channel. 
     """
@@ -571,8 +515,8 @@ def interactive_zoom(event, fig, ax, scatter_data, image_3d, image_orig, zoom_si
                 x1_CH2, x2_CH2 = max(0, x_CH2 - zoom_size), min(image_3d.shape[1], x_CH2 + zoom_size)
                 y1_CH2, y2_CH2 = max(0, y_CH2 - zoom_size), min(image_3d.shape[0], y_CH2 + zoom_size)
 
-                zoomed_image_CH1 = image_orig[y1_CH1:y2_CH1, x1_CH1:x2_CH1]
-                zoomed_image_CH2 = image_orig[y1_CH2:y2_CH2, x1_CH2:x2_CH2]
+                zoomed_image_CH1 = image_orig[y1_CH1:y2_CH1+1, x1_CH1:x2_CH1+1]
+                zoomed_image_CH2 = image_orig[y1_CH2:y2_CH2+1, x1_CH2:x2_CH2+1]
 
                 ax_zoom_CH1.clear()
                 ax_zoom_CH1.imshow(zoomed_image_CH1, cmap="gray")
@@ -580,7 +524,7 @@ def interactive_zoom(event, fig, ax, scatter_data, image_3d, image_orig, zoom_si
                 ax_zoom_CH1.set_yticks([])
                 ax_zoom_CH1.set_title("")
                 ax_zoom_CH1.set_title(f"Zoomed In ({y_CH1}, {x_CH2})")
-                rect1 = patches.Rectangle((x1_CH1, y1_CH1), x2_CH1 - x1_CH1, y2_CH1 - y1_CH1, linewidth=1, edgecolor=CH1_colour, facecolor='none')
+                rect1 = patches.Rectangle((x1_CH1, y1_CH1), x2_CH1 - x1_CH1, y2_CH1 - y1_CH1, linewidth=1.5, edgecolor=CH1_colour, facecolor='none')
                 ax.add_patch(rect1)
                 ax_zoom_CH2.clear()
             
@@ -589,7 +533,7 @@ def interactive_zoom(event, fig, ax, scatter_data, image_3d, image_orig, zoom_si
                 ax_zoom_CH2.set_xticks([])
                 ax_zoom_CH2.set_yticks([])
                 ax_zoom_CH2.set_title(f"Zoomed In ({y_CH2}, {x_CH2})")
-                rect2 = patches.Rectangle((x1_CH2, y1_CH2), x2_CH2 - x1_CH2, y2_CH2 - y1_CH2, linewidth=1, edgecolor=CH2_colour, facecolor='none')
+                rect2 = patches.Rectangle((x1_CH2, y1_CH2), x2_CH2 - x1_CH2, y2_CH2 - y1_CH2, linewidth=1.5, edgecolor=CH2_colour, facecolor='none')
                 ax.add_patch(rect2)
                 
 
@@ -597,7 +541,7 @@ def interactive_zoom(event, fig, ax, scatter_data, image_3d, image_orig, zoom_si
     fig.canvas.draw_idle()
 
 
-def interactive_2CH_plots(event, pma_file_path, fig, ax, scatter_data, y_centre_arr, x_centre_arr, image_3d, image_orig, mask, radius=4, tpf=1/100, zoom_size=5, R_0=5.6, time_interval=1, background_treatment = "None", CH_consideration=False, Intense_axes_CH1=[0.48, 0.81, 0.5, 0.15], Intense_axes_CH2=[0.48, 0.56, 0.5, 0.15], FRET_axes=[0.48, 0.31, 0.5, 0.15], dist_axes=[0.48, 0.06, 0.5, 0.15], CH1_zoom_axes=[0.04, 0.06, 0.15, 0.15], CH2_zoom_axes=[0.22, 0.06, 0.15, 0.15], CH1_colour = "g", CH2_colour = "b", FRET_colour = "r", distance_colour = "y"):
+def interactive_2CH_plots(event, pma_file_path, fig, ax, scatter_data, y_centre_arr, x_centre_arr, image_3d, image_orig, mask, radius=4, tpf=1/100, zoom_size=5, R_0=5.6, time_interval=1, background_treatment = "None", CH_consideration=False, time_unit="s", dist_unit="nm", Intense_axes_CH1=[0.48, 0.81, 0.5, 0.15], Intense_axes_CH2=[0.48, 0.56, 0.5, 0.15], FRET_axes=[0.48, 0.31, 0.5, 0.15], dist_axes=[0.48, 0.06, 0.5, 0.15], CH1_zoom_axes=[0.04, 0.06, 0.15, 0.15], CH2_zoom_axes=[0.22, 0.06, 0.15, 0.15], CH1_colour = "orange", CH2_colour = "b", FRET_colour = "forestgreen", distance_colour = "palevioletred"):
     """ 
     Checks if the mouse hovers over a peak and updates annotation. If clicked, it displays the zoomed image and intensity time-series of that peak and its corresponding peak and the FRET and distance time series.
     """
@@ -640,8 +584,8 @@ def interactive_2CH_plots(event, pma_file_path, fig, ax, scatter_data, y_centre_
                 x1_CH2, x2_CH2 = max(0, x_CH2 - zoom_size), min(image_3d.shape[1], x_CH2 + zoom_size+1)
                 y1_CH2, y2_CH2 = max(0, y_CH2 - zoom_size), min(image_3d.shape[0], y_CH2 + zoom_size+1)
 
-                zoomed_image_CH1 = image_orig[y1_CH1:y2_CH1, x1_CH1:x2_CH1]
-                zoomed_image_CH2 = image_orig[y1_CH2:y2_CH2, x1_CH2:x2_CH2]
+                zoomed_image_CH1 = image_orig[y1_CH1:y2_CH1+1, x1_CH1:x2_CH1+1]
+                zoomed_image_CH2 = image_orig[y1_CH2:y2_CH2+1, x1_CH2:x2_CH2+1]
                 
                 ax_zoom_CH1.clear()
                 ax_zoom_CH1.imshow(zoomed_image_CH1, cmap="gray")
@@ -676,7 +620,7 @@ def interactive_2CH_plots(event, pma_file_path, fig, ax, scatter_data, y_centre_
                 ax_intensity_CH1.clear()
                 ax_intensity_CH1.plot(time, tot_intensity_all_frames_CH1, color=CH1_colour, label='CH2')
                 ax_intensity_CH1.set_title(f"Intensity v Time in Donor Peak {idx}, BT: {background_treatment}, CH consideration: {CH_consideration}")
-                ax_intensity_CH1.set_xlabel('Time (s)')
+                ax_intensity_CH1.set_xlabel(f'Time ({time_unit})')
                 ax_intensity_CH1.set_ylabel('Intensity')
                 ax_intensity_CH1.set_ylim(-255, max(tot_intensity_all_frames_CH1)+255)
                 ax_intensity_CH1.set_xlim(0, time[-1])
@@ -687,7 +631,7 @@ def interactive_2CH_plots(event, pma_file_path, fig, ax, scatter_data, y_centre_
                 ax_intensity_CH2.clear()
                 ax_intensity_CH2.plot(time, tot_intensity_all_frames_CH2, color=CH2_colour, label='CH2')
                 ax_intensity_CH2.set_title(f"Intensity v Time in Acceptor Peak {idx}, BT: {background_treatment}, CH consideration: {CH_consideration}")
-                ax_intensity_CH2.set_xlabel('Time (s)')
+                ax_intensity_CH2.set_xlabel(f'Time ({time_unit})')
                 ax_intensity_CH2.set_ylabel('Intensity')
                 ax_intensity_CH2.set_ylim(-255, max(tot_intensity_all_frames_CH2)+255)
                 ax_intensity_CH2.set_xlim(0, time[-1])
@@ -699,7 +643,7 @@ def interactive_2CH_plots(event, pma_file_path, fig, ax, scatter_data, y_centre_
                 ax_FRET.clear()               
                 ax_FRET.plot(time, FRET_values, color=FRET_colour)
                 ax_FRET.set_title(f"FRET v Time in Pair {idx}")
-                ax_FRET.set_xlabel('Time (s)')
+                ax_FRET.set_xlabel(f'Time ({time_unit})')
                 ax_FRET.set_ylabel('FRET Efficiency')
                 ax_FRET.set_xlim(0, time[-1])
                 ax_FRET.grid()
@@ -710,23 +654,23 @@ def interactive_2CH_plots(event, pma_file_path, fig, ax, scatter_data, y_centre_
                 ax_dist.clear()
                 ax_dist.plot(time, dist_values, color=distance_colour)
                 ax_dist.set_title(f"Distance v Time in Pair {idx}")
-                ax_dist.set_xlabel('Time (s)')
-                ax_dist.set_ylabel('Distance (nm)')
+                ax_dist.set_xlabel(f'Time ({time_unit})')
+                ax_dist.set_ylabel(f'Distance ({dist_unit})')
                 ax_dist.set_xlim(0, time[-1])
                 ax_dist.grid()
                 ax_dist.xaxis.set_major_locator(MultipleLocator(time_interval))
 
 
-                rect1 = patches.Rectangle((x1_CH1, y1_CH1), x2_CH1 - x1_CH1, y2_CH1 - y1_CH1, linewidth=1, edgecolor=CH1_colour, facecolor='none')
+                rect1 = patches.Rectangle((x1_CH1, y1_CH1), x2_CH1 - x1_CH1, y2_CH1 - y1_CH1, linewidth=1.5, edgecolor=CH1_colour, facecolor='none')
                 ax.add_patch(rect1)
-                rect2 = patches.Rectangle((x1_CH2, y1_CH2), x2_CH2 - x1_CH2, y2_CH2 - y1_CH2, linewidth=1, edgecolor=CH2_colour, facecolor='none')
+                rect2 = patches.Rectangle((x1_CH2, y1_CH2), x2_CH2 - x1_CH2, y2_CH2 - y1_CH2, linewidth=1.5, edgecolor=CH2_colour, facecolor='none')
                 ax.add_patch(rect2)
 
     annot.set_visible(visible)
     fig.canvas.draw_idle()
 
 
-def interactive_2CH_plots_merged(event, pma_file_path, fig, ax, scatter_data, y_centre_arr, x_centre_arr, image_3d, image_orig, mask, radius=4, tpf=1/100, R_0=5.6, time_interval=1, zoom_size=5, background_treatment = "None", CH_consideration=False, Intense_axes=[0.48, 0.6, 0.5, 0.3], FRET_axes=[0.48, 0.35, 0.5, 0.15], dist_axes=[0.48, 0.1, 0.5, 0.15], CH1_zoom_axes=[0.04, 0.06, 0.15, 0.15], CH2_zoom_axes=[0.23, 0.06, 0.15, 0.15], CH1_colour = "g", CH2_colour = "b", FRET_colour = "r", distance_colour = "y"):
+def interactive_2CH_plots_merged(event, pma_file_path, fig, ax, scatter_data, y_centre_arr, x_centre_arr, image_3d, image_orig, mask, radius=4, tpf=1/100, R_0=5.6, time_interval=1, zoom_size=5, background_treatment = "None", CH_consideration=False,time_unit="s", dist_unit="nm", Intense_axes=[0.48, 0.6, 0.5, 0.3], FRET_axes=[0.48, 0.35, 0.5, 0.15], dist_axes=[0.48, 0.1, 0.5, 0.15], CH1_zoom_axes=[0.04, 0.06, 0.15, 0.15], CH2_zoom_axes=[0.23, 0.06, 0.15, 0.15], CH1_colour = "orange", CH2_colour = "b", FRET_colour = "forestgreen", distance_colour = "palevioletred"):
     """ 
     Checks if the mouse hovers over a peak and updates annotation. If clicked, it displays the zoomed image and intensity time-series of that peak and its corresponding peak and the FRET and distance time series.
     The intensity time series of the peaks are plotted in the same axes.
@@ -771,8 +715,8 @@ def interactive_2CH_plots_merged(event, pma_file_path, fig, ax, scatter_data, y_
                 x1_CH2, x2_CH2 = max(0, x_CH2 - zoom_size), min(image_3d.shape[1], x_CH2 + zoom_size)
                 y1_CH2, y2_CH2 = max(0, y_CH2 - zoom_size), min(image_3d.shape[0], y_CH2 + zoom_size)
 
-                zoomed_image_CH1 = image_orig[y1_CH1:y2_CH1, x1_CH1:x2_CH1]
-                zoomed_image_CH2 = image_orig[y1_CH2:y2_CH2, x1_CH2:x2_CH2]
+                zoomed_image_CH1 = image_orig[y1_CH1:y2_CH1+1, x1_CH1:x2_CH1+1]
+                zoomed_image_CH2 = image_orig[y1_CH2:y2_CH2+1, x1_CH2:x2_CH2+1]
                 
                 ax_zoom_CH1.clear()
                 ax_zoom_CH1.imshow(zoomed_image_CH1, cmap="gray")
@@ -807,7 +751,7 @@ def interactive_2CH_plots_merged(event, pma_file_path, fig, ax, scatter_data, y_
                 ax_intensity.plot(time, tot_intensity_all_frames_CH1, color=CH1_colour, label='CH1')
                 ax_intensity.plot(time, tot_intensity_all_frames_CH2, color=CH2_colour, label='CH2')
                 ax_intensity.set_title(f"Intensity v Time in Peak {idx}, BT: {background_treatment}, CH consideration: {CH_consideration}")
-                ax_intensity.set_xlabel('Time (s)')
+                ax_intensity.set_xlabel(f'Time ({time_unit})')
                 ax_intensity.set_ylabel('Intensity')
                 ax_intensity.set_ylim(-255, max(max(tot_intensity_all_frames_CH1), max(tot_intensity_all_frames_CH2))+255)
                 ax_intensity.legend(bbox_to_anchor=(1.0, 1.22), loc='upper right')
@@ -820,7 +764,7 @@ def interactive_2CH_plots_merged(event, pma_file_path, fig, ax, scatter_data, y_
                 ax_FRET.clear()               
                 ax_FRET.plot(time, FRET_values, color=FRET_colour)
                 ax_FRET.set_title(f"FRET v Time in Pair {idx}")
-                ax_FRET.set_xlabel('Time (s)')
+                ax_FRET.set_xlabel(f'Time ({time_unit})')
                 ax_FRET.set_ylabel('FRET Efficiency')
                 ax_FRET.set_xlim(0, time[-1])
                 ax_FRET.grid()
@@ -831,21 +775,21 @@ def interactive_2CH_plots_merged(event, pma_file_path, fig, ax, scatter_data, y_
                 ax_dist.clear()
                 ax_dist.plot(time, dist_values, color=distance_colour)
                 ax_dist.set_title(f"Distance v Time in Pair {idx}")
-                ax_dist.set_xlabel('Time (s)')
-                ax_dist.set_ylabel('Distance (nm)')
+                ax_dist.set_xlabel(f'Time ({time_unit})')
+                ax_dist.set_ylabel(f'Distance ({dist_unit})')
                 ax_dist.set_xlim(0, time[-1])
                 ax_dist.grid()
                 ax_dist.xaxis.set_major_locator(MultipleLocator(time_interval))
             
-                rect1 = patches.Rectangle((x1_CH1, y1_CH1), x2_CH1 - x1_CH1, y2_CH1 - y1_CH1, linewidth=1, edgecolor=CH1_colour, facecolor='none')
+                rect1 = patches.Rectangle((x1_CH1, y1_CH1), x2_CH1 - x1_CH1, y2_CH1 - y1_CH1, linewidth=1.5, edgecolor=CH1_colour, facecolor='none')
                 ax.add_patch(rect1)
-                rect2 = patches.Rectangle((x1_CH2, y1_CH2), x2_CH2 - x1_CH2, y2_CH2 - y1_CH2, linewidth=1, edgecolor=CH2_colour, facecolor='none')
+                rect2 = patches.Rectangle((x1_CH2, y1_CH2), x2_CH2 - x1_CH2, y2_CH2 - y1_CH2, linewidth=1.5, edgecolor=CH2_colour, facecolor='none')
                 ax.add_patch(rect2)
 
     annot.set_visible(visible)
     fig.canvas.draw_idle()
 
-def display_time_series(pma_file_path, avg_image, peak_idx, CH1_arr, CH2_arr, tpf = 1/100, R_0=5.6, radius=4, time_interval=1, background_treatment = "None", CH_consideration=False, CH1_intensity_interval=500, CH2_intensity_interval=500, figsize=(15, 8), CH1_colour="g", CH2_colour="b", FRET_colour="r", distance_colour="y"):
+def display_time_series(pma_file_path, avg_image, peak_idx, CH1_arr, CH2_arr, tpf = 1/100, R_0=5.6, radius=4, time_interval=1, background_treatment = "None", CH_consideration=False, time_unit="s", dist_unit="nm", CH1_intensity_interval=500, CH2_intensity_interval=500, figsize=(15, 8), CH1_colour="orange", CH2_colour="b", FRET_colour="forestgreen", distance_colour="palevioletred"):
     """
     From a pma file, displays the time series of the total intensity in a circle of a specified radius centred on coordinates (y_centre, x_centre) for both channels.
     """
@@ -887,7 +831,7 @@ def display_time_series(pma_file_path, avg_image, peak_idx, CH1_arr, CH2_arr, tp
     ax[0].plot(time, tot_intensity_all_frames_CH1, color=CH1_colour)
     ax[0].set_title(f'Intensity v Time in Donor Peak {peak_idx}, BT: {background_treatment}, CH consideration: {CH_consideration}')
     ax[0].set_ylabel('Intensity')
-    ax[0].set_xlabel('Time (s)')
+    ax[0].set_xlabel(f'Time ({time_unit})')
     ax[0].set_ylim(-255, max(tot_intensity_all_frames_CH1)+255)
     ax[0].set_xlim(0, time[-1])
     ax[0].grid()
@@ -898,7 +842,7 @@ def display_time_series(pma_file_path, avg_image, peak_idx, CH1_arr, CH2_arr, tp
     ax[1].plot(time, tot_intensity_all_frames_CH2, color=CH2_colour)
     ax[1].set_title(f'Intensity v Time in Acceptor Peak {peak_idx}, BT: {background_treatment}, CH consideration: {CH_consideration}')
     ax[1].set_ylabel('Intensity')
-    ax[1].set_xlabel('Time (s)')
+    ax[1].set_xlabel(f'Time ({time_unit})')
     ax[1].set_ylim(-255, max(tot_intensity_all_frames_CH2)+255)
     ax[1].grid()
     ax[1].set_xlim(0, time[-1])
@@ -908,7 +852,7 @@ def display_time_series(pma_file_path, avg_image, peak_idx, CH1_arr, CH2_arr, tp
     FRET_values = calc_FRET(np.array(tot_intensity_all_frames_CH1), np.array(tot_intensity_all_frames_CH2))
     ax[2].plot(time, FRET_values, color=FRET_colour)
     ax[2].set_title(f'FRET v Time (Peak {peak_idx})')
-    ax[2].set_xlabel('Time (s)')
+    ax[2].set_xlabel(f'Time ({time_unit})')
     ax[2].set_ylabel('FRET Efficiency')
     ax[2].grid()
     ax[2].set_xlim(0, time[-1])
@@ -918,8 +862,8 @@ def display_time_series(pma_file_path, avg_image, peak_idx, CH1_arr, CH2_arr, tp
     distance = calc_distance(FRET_values, R_0)
     ax[3].plot(time, distance, color=distance_colour)
     ax[3].set_title(f'Distance v Time (Peak {peak_idx})')
-    ax[3].set_xlabel('Time (s)')
-    ax[3].set_ylabel('Distance (nm)')
+    ax[3].set_xlabel(f'Time ({time_unit})')
+    ax[3].set_ylabel(f'Distance ({dist_unit})')
     ax[3].grid()
     ax[3].set_xlim(0, time[-1])
     ax[3].xaxis.set_major_locator(MultipleLocator(time_interval)) 
@@ -986,7 +930,7 @@ def find_trip(peaks_1, mapped_CH2, mapped_CH3, tolerance=4, shift_CH2=[0,0], shi
     return len(out_pair_arr_CH1), out_pair_arr_CH1, out_pair_arr_CH2, out_pair_arr_CH3
 
 
-def interactive_3CH_plots(event, pma_file_path, fig, ax, scatter_data, y_centre_arr, x_centre_arr, image_3d, image_orig, mask, radius=4, tpf=1/100, R_0_1=5.6, R_0_2=5.6, time_interval=10, intensity_interval=500, FRET_interval=0.2, distance_1_interval=0.5, distance_2_interval=0.2, zoom_size=5, background_treatment="None", CH_consideration=False, Intense_axes=[0.48, 0.81, 0.5, 0.15], FRET_axes = [0.48, 0.56, 0.5, 0.15], distance_axes_1=[0.48, 0.31, 0.5, 0.15], distance_axes_2=[0.48, 0.06, 0.5, 0.15],  CH1_zoom_axes=[0.0005, 0.05, 0.15, 0.15], CH2_zoom_axes=[0.135, 0.05, 0.15, 0.15], CH3_zoom_axes=[0.27, 0.05, 0.15, 0.15], CH1_colour = "g", CH2_colour = "b", CH3_colour = "purple", FRET_1_colour = "r", FRET_2_colour = "c", distance_1_colour = "r", distance_2_colour = "c"):
+def interactive_3CH_plots(event, pma_file_path, fig, ax, scatter_data, y_centre_arr, x_centre_arr, image_3d, image_orig, mask, radius=4, tpf=1/100, R_0_1=5.6, R_0_2=5.6, time_interval=10, intensity_interval=500, FRET_interval=0.2, distance_1_interval=0.5, distance_2_interval=0.2, zoom_size=5, background_treatment="None", CH_consideration=False, time_unit="s", dist_unit="nm", Intense_axes=[0.48, 0.81, 0.5, 0.15], FRET_axes = [0.48, 0.56, 0.5, 0.15], distance_axes_1=[0.48, 0.31, 0.5, 0.15], distance_axes_2=[0.48, 0.06, 0.5, 0.15],  CH1_zoom_axes=[0.0005, 0.05, 0.15, 0.15], CH2_zoom_axes=[0.135, 0.05, 0.15, 0.15], CH3_zoom_axes=[0.27, 0.05, 0.15, 0.15], CH1_colour = "orange", CH2_colour = "b", CH3_colour = "darkviolet", FRET_1_colour = "orange", FRET_2_colour = "b", distance_1_colour = "orange", distance_2_colour = "b"):
     """
     From a pma file, displays the time series of the total intensity in a circle of a specified radius centred on coordinates (y_centre, x_centre) for all channels.
     """
@@ -1034,9 +978,9 @@ def interactive_3CH_plots(event, pma_file_path, fig, ax, scatter_data, y_centre_
                 x1_CH3, x2_CH3 = max(0, x_CH3 - zoom_size), min(image_3d.shape[1], x_CH3 + zoom_size)
                 y1_CH3, y2_CH3 = max(0, y_CH3 - zoom_size), min(image_3d.shape[0], y_CH3 + zoom_size)
 
-                zoomed_image_CH1 = image_orig[y1_CH1:y2_CH1, x1_CH1:x2_CH1]
-                zoomed_image_CH2 = image_orig[y1_CH2:y2_CH2, x1_CH2:x2_CH2]
-                zoomed_image_CH3 = image_orig[y1_CH3:y2_CH3, x1_CH3:x2_CH3]
+                zoomed_image_CH1 = image_orig[y1_CH1:y2_CH1+1, x1_CH1:x2_CH1+1]
+                zoomed_image_CH2 = image_orig[y1_CH2:y2_CH2+1, x1_CH2:x2_CH2+1]
+                zoomed_image_CH3 = image_orig[y1_CH3:y2_CH3+1, x1_CH3:x2_CH3+1]
 
                 ax_zoom_CH1.clear()
                 ax_zoom_CH1.imshow(zoomed_image_CH1, cmap="gray")
@@ -1090,7 +1034,7 @@ def interactive_3CH_plots(event, pma_file_path, fig, ax, scatter_data, y_centre_
                 ax_intensity.plot(time, tot_intensity_all_frames_CH2, color=CH2_colour, label='CH2')
                 ax_intensity.plot(time, tot_intensity_all_frames_CH3, color=CH3_colour, label='CH3')
                 ax_intensity.set_title(f"Intensity v Time in Peak {idx}, BT: {background_treatment}, CH consideration: {CH_consideration}")
-                ax_intensity.set_xlabel("Time (s)")
+                ax_intensity.set_xlabel(f"Time ({time_unit})")
                 ax_intensity.set_ylabel("Intensity")
                 ax_intensity.set_xlim(0, time[-1])
                 ax_intensity.grid()
@@ -1104,7 +1048,7 @@ def interactive_3CH_plots(event, pma_file_path, fig, ax, scatter_data, y_centre_
                 ax_FRET.plot(time, FRET_values_1, color=FRET_1_colour, label='CH1-CH2')
                 ax_FRET.plot(time, FRET_values_2, color=FRET_2_colour, label='CH2-CH3')
                 ax_FRET.set_title(f"FRET v Time (Triplet {idx})")
-                ax_FRET.set_xlabel("Time (s)")
+                ax_FRET.set_xlabel(f"Time ({time_unit})")
                 ax_FRET.set_ylabel("Intensity")
                 ax_FRET.set_xlim(0, time[-1])
                 ax_FRET.grid()
@@ -1118,7 +1062,7 @@ def interactive_3CH_plots(event, pma_file_path, fig, ax, scatter_data, y_centre_
                 ax_distance_1.clear()
                 ax_distance_1.plot(time, distance_1, color=distance_1_colour)
                 ax_distance_1.set_title(f"CH1-CH2 Distance v Time (Peak ID: {idx})")
-                ax_distance_1.set_xlabel("Time (s)")
+                ax_distance_1.set_xlabel(f"Time ({time_unit})")
                 ax_distance_1.set_ylabel("Distance (nm)")
                 ax_distance_1.set_xlim(0, time[-1])
                 ax_distance_1.grid()
@@ -1129,8 +1073,8 @@ def interactive_3CH_plots(event, pma_file_path, fig, ax, scatter_data, y_centre_
                 ax_distance_2.clear()
                 ax_distance_2.plot(time, distance_2, color=distance_2_colour)
                 ax_distance_2.set_title(f"CH2-CH3 Distance v Time (Peak ID: {idx})")
-                ax_distance_2.set_xlabel("Time (s)")
-                ax_distance_2.set_ylabel("Distance (nm)")
+                ax_distance_2.set_xlabel(f"Time ({time_unit})")
+                ax_distance_2.set_ylabel(f"Distance ({dist_unit})")
                 ax_distance_2.set_xlim(0, time[-1])
                 ax_distance_2.grid()
                 ax_distance_2.xaxis.set_major_locator(MultipleLocator(time_interval))
