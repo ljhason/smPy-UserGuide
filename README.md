@@ -34,7 +34,7 @@ Below I provide a brief overview of the key directories within this repository:
 - Contains the PMA files used within the user guides.
 
 ### `User Guide - Two Colour/`
-- Contains a **Jupyter Notebook** and two **interactive Python scripts**.
+- Contains a Jupyter Notebook and two interactive Python scripts.
 - Walks through usage of the package for dual-channel (two-colour) FRET analysis.
 - Ideal for hands-on learning or demonstration purposes.
 - [`UserGuide_TwoColour.ipynb`](User%20Guide%20-%20Two%20Colour/UserGuide_TwoColour.ipynb): A Jupyter Notebook outlining the workflow for handling two-colour pre-processing, analysis, and visualisation.
@@ -42,7 +42,7 @@ Below I provide a brief overview of the key directories within this repository:
 - [`Time_Series_TwoColour.py`](User%20Guide%20-%20Two%20Colour/Time_Series_TwoColour.py): An interactive script to display time-series plots, upon selecting a mapped donor-acceptor pair.
 - 
 ### `User Guide - Three Colour/`
-- Contains a **Jupyter Notebook** and two **interactive Python scripts**.
+- Contains a Jupyter Notebook and two interactive Python scripts.
 - Walks through usage of the package for three-colour FRET analysis.
 - Ideal for hands-on learning or demonstration purposes.
 - [`UserGuide_ThreeColour.ipynb`](User%20Guide%20-%20Three%20Colour/UserGuide_ThreeColour.ipynb): A Jupyter Notebook outlining the workflow for handling three-colour pre-processing, analysis, and visualisation.
