@@ -346,7 +346,7 @@ def dim_to_3(image):
     """
     return np.stack((image,) * 3, axis=-1)
 
-def find_good_peaks(image_path, min_distance = 1, clip=10, block_size = 32, scaler_percent = 20, boarder=10, max_rad=3):
+def find_good_peaks(image_path, min_distance = 1, clip=10, block_size = 32, scaler_percent = 20, border=10, max_rad=3):
     """
     From a grayscale image, finds all peaks bright spots in the image using a local maximum filter and filters out the peaks that are too close to the edges and whose radius is larger than max_rad.
     """
@@ -357,7 +357,7 @@ def find_good_peaks(image_path, min_distance = 1, clip=10, block_size = 32, scal
 
     for peak in peaks_coords:
         y, x = peak
-        if y < boarder or y > height - boarder or x < boarder or x > width - boarder:
+        if y < border or y > height - border or x < border or x > width - border:
             bad_peaks.append(peak)
         elif image_2[y, x + max_rad+1] > 0 or image_2[y, x - max_rad] > 0 or image_2[y+max_rad+1, x ] > 0 or image_2[y-max_rad, x] > 0:
             bad_peaks.append(peak)
