@@ -46,7 +46,7 @@ ax.legend(loc='upper right', bbox_to_anchor=(1.1, 1.15))
 annot = init_annot(ax=ax)
 
 scatter_data = [(scat1, good_peaks_1, "CH1"), (scat2, good_peaks_2_shift, "CH2")]
-# Connect hover event to the figure
+
 fig.canvas.mpl_connect("motion_notify_event", lambda event: print_coords_trigger(event, fig, scatter_data))
 fig.canvas.mpl_connect("button_press_event", lambda event: print_coords_trigger(event, fig, scatter_data))
 
