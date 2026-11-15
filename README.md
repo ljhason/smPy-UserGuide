@@ -22,9 +22,18 @@ The User Guides provide details on how to use smPy functions to analyse two colo
 ## Dependencies
 
 To install all required packages via pip:
-
 ```bash
-pip install numpy scikit-image matplotlib opencv-python pillow
+python3 -m venv .venv
+```
+
+# Activate environment
+```
+source .venv/bin/activate  # On macOS/Linux
+```
+
+# Install dependencies
+```bash
+pip install -r requirements.txt
 ```
 
 ## Repository Structure
