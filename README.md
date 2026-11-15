@@ -20,19 +20,10 @@ The User Guides provide details on how to use smPy functions to analyse two colo
 
 
 ## Dependencies
-
-To install all required packages via pip:
+Install `smPy` from source;
 ```bash
 python3 -m venv .venv
-```
-
-#### Activate environment
-```
-source .venv/bin/activate  # On macOS/Linux
-```
-
-#### Install dependencies
-```bash
+source .venv/bin/activate  # on Windows: .venv\Scripts\activate
 pip install -r requirements.txt
 ```
 
