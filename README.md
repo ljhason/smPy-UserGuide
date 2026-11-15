@@ -51,7 +51,7 @@ Below I provide a brief overview of the key directories within this repository:
 - [`UserGuide_TwoColour.ipynb`](User%20Guide%20-%20Two%20Colour/UserGuide_TwoColour.ipynb): A Jupyter Notebook outlining the workflow for handling two-colour pre-processing, analysis, and visualisation.
 - [`Manual_Select_TwoColour.py`](User%20Guide%20-%20Two%20/Manual_Select_TwoColour.py): An interactive script to aid in manually selecting donor-acceptor peak pairs.
 - [`Time_Series_TwoColour.py`](User%20Guide%20-%20Two%20Colour/Time_Series_TwoColour.py): An interactive script to display time-series plots, upon selecting a mapped donor-acceptor pair.
-- 
+  
 #### `User Guide - Three Colour/`
 - Contains a Jupyter Notebook and two interactive Python scripts.
 - Walks through usage of the package for three-colour FRET analysis.
