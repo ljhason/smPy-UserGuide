@@ -26,12 +26,12 @@ To install all required packages via pip:
 python3 -m venv .venv
 ```
 
-### Activate environment
+#### Activate environment
 ```
 source .venv/bin/activate  # On macOS/Linux
 ```
 
-### Install dependencies
+#### Install dependencies
 ```bash
 pip install -r requirements.txt
 ```
@@ -42,7 +42,7 @@ Below I provide a brief overview of the key directories within this repository:
 ### `pma files/`
 - Contains the PMA files used within the user guides.
 
-### `User Guide - Two Colour/`
+#### `User Guide - Two Colour/`
 - Contains a Jupyter Notebook and two interactive Python scripts.
 - Walks through usage of the package for dual-channel (two-colour) FRET analysis.
 - Ideal for hands-on learning or demonstration purposes.
@@ -50,7 +50,7 @@ Below I provide a brief overview of the key directories within this repository:
 - [`Manual_Select_TwoColour.py`](User%20Guide%20-%20Two%20/Manual_Select_TwoColour.py): An interactive script to aid in manually selecting donor-acceptor peak pairs.
 - [`Time_Series_TwoColour.py`](User%20Guide%20-%20Two%20Colour/Time_Series_TwoColour.py): An interactive script to display time-series plots, upon selecting a mapped donor-acceptor pair.
 - 
-### `User Guide - Three Colour/`
+#### `User Guide - Three Colour/`
 - Contains a Jupyter Notebook and two interactive Python scripts.
 - Walks through usage of the package for three-colour FRET analysis.
 - Ideal for hands-on learning or demonstration purposes.
@@ -58,7 +58,7 @@ Below I provide a brief overview of the key directories within this repository:
 - [`Manual_Select_ThreeColour.py`](User%20Guide%20-%20Three%20/Manual_Select_ThreeColour.py): An interactive script to aid in manually selecting peak triplets.
 - [`Time_Series_ThreeColour.py`](User%20Guide%20-%20Three%20Colour/Time_Series_ThreeColour.py): An interactive script to display time-series plots, upon selecting a mapped triplet.
 
-### `Appendices/`
+#### `Appendices/`
 - Supplementary material, providing further explanations and figures.
 - [`Appendix_A_Find_Peaks_Default_Values.ipynb`](Appendices/Appendix_A_Find_Peaks_Default_Values.ipynb): A Jupyter Notebook describing how the find_peaks() default argument values were arrived at.
 - [`Appendix_B_LinearShift_Benefits.ipynb`](Appendices/Appendix_B_LinearShift_Benefits.ipynb): An Jupyter Notebook demonstrating the benefits of applying a linear shift prior to a polynomial mapping. 
