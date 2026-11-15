@@ -6,7 +6,7 @@ The importance of single-molecule microscopy is motivated by the useful informat
 
 ## What is smPy?
 
-smPy is an open-source Python package that aims to unify the smFRET data pre-processing, analysis, and visualisation pipeline. smPy's main strengths are: <br>
+`smPy` is an open-source Python package that aims to unify the smFRET data pre-processing, analysis, and visualisation pipeline. smPy's main strengths are: <br>
 (1) its user-friendly interface in the manual peak selection and time-series display stages, <br>
 (2) its flexible and adjustable background treatment, and <br>
 (3) scope for three-colour FRET analysis. <br>
@@ -14,13 +14,13 @@ smPy is an open-source Python package that aims to unify the smFRET data pre-pro
 smPy is available under the GNU General Public License, Version 3 (GPLv3).
 
 ## Next Steps
-For smPy to benefit the single-molecule imaging community, functions must first be validated against standard molecule samples.
-Additional next steps to improve smPy are: <br> 
+For `smPy` to benefit the single-molecule imaging community, functions must first be validated against standard molecule samples.
+Additional next steps to improve `smPy` are: <br> 
 (1) the consideration of time efficiency, <br>
 (2) full three-channel analysis capabilities, and <br> 
 (3) a graphical user interface, GUI. <br>
 
-The User Guides provide details on how to use smPy functions to analyse two colour and three-colour FRET data from start to finish, stages include:
+The User Guides provide details on how to use `smPy` functions to analyse two colour and three-colour FRET data from start to finish, stages include:
 * Importing and reading PMA files
 * Creating mp4 files
 * Creating an average frame
