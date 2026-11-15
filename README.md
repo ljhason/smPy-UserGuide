@@ -32,6 +32,9 @@ The User Guides provide details on how to use smPy functions to analyse two colo
 
 ## Dependencies
 Install `smPy` from source;
+
+In order to clone this repository, you will first need to install Git Large File Storage, documentation on how to do this is available [here](https://docs.github.com/en/repositories/working-with-files/managing-large-files/installing-git-large-file-storage).
+
 ```bash
 python3 -m venv .venv
 source .venv/bin/activate  # on Windows: .venv\Scripts\activate
