@@ -33,7 +33,12 @@ The User Guides provide details on how to use smPy functions to analyse two colo
 ## Dependencies
 Install `smPy` from source;
 
-In order to clone this repository, you will first need to install Git Large File Storage, documentation on how to do this is available [here](https://docs.github.com/en/repositories/working-with-files/managing-large-files/installing-git-large-file-storage).
+To clone the pma files, the installation of Git Large File Storage is required, documentation on how to do this is available [here](https://docs.github.com/en/repositories/working-with-files/managing-large-files/installing-git-large-file-storage). Then, run
+```bash
+git clone https://github.com/ljhason/smPy-UserGuide.git
+cd smPy-UserGuide
+```
+(Note: if the pma files are not needed, you can run the above command without installing Git LFS.)
 
 ```bash
 python3 -m venv .venv
