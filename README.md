@@ -26,12 +26,12 @@ To install all required packages via pip:
 python3 -m venv .venv
 ```
 
-# Activate environment
+### Activate environment
 ```
 source .venv/bin/activate  # On macOS/Linux
 ```
 
-# Install dependencies
+### Install dependencies
 ```bash
 pip install -r requirements.txt
 ```
